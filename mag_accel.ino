@@ -37,26 +37,29 @@ void setup(void)
 void loop(void)
 {
   /* Get a new sensor event */
-  sensors_event_t accel_event, mag_event;
-  accel.getEvent(&accel_event);
-  mag.getEvent(&mag_event);
+  sensors_event_t event;
 
   /*Declare General Unit Vector */
   Uvec unit_accel, unit_mag;
-
-  /* Display the results (acceleration is measured in m/s^2) */
-  Serial.print("X: "); Serial.print(accel_event.acceleration.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(accel_event.acceleration.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(accel_event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
-
-  /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-  Serial.print("X: "); Serial.print(mag_event.magnetic.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(mag_event.magnetic.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(mag_event.magnetic.z); Serial.print("  ");Serial.println("uT");
   
-  /*Acceleration Unit Vector*/
-  gen_unit_vec(mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z, &unit_accel);
+  /*Magnetometer Unit Vector*/
+  accel.getEvent(&event);
+  /* Display the results (acceleration is measured in m/s^2) */
+  Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
+  Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
+  Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
+  gen_unit_vec(event.acceleration.x, event.acceleration.y, event.acceleration.z, &unit_accel);
   print_unit_vec(unit_accel);
+
+  mag.getEvent(&event);
+  /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
+  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
+  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
+  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+  
+  /*Magnetometer Unit Vector*/
+  gen_unit_vec(event.magnetic.x, event.magnetic.y, event.magnetic.z, &unit_mag);
+  print_unit_vec(unit_mag);
   
   Serial.println("");
   /* Delay before the next sample */
