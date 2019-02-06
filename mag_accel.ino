@@ -1,15 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_LSM303_U.h>
-#include <math.h>
-
-/* INCOMPLETE unit vector struct */
-typedef struct
-{
-  int x;
-  int y;
-  int z;
-} U_vec;
+#include "unit_vec.h"
 
 /* Assign ID to accelerometer */
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(88888);
@@ -49,6 +41,9 @@ void loop(void)
   accel.getEvent(&accel_event);
   mag.getEvent(&mag_event);
 
+  /*Declare General Unit Vector */
+  Uvec unit_accel, unit_mag;
+
   /* Display the results (acceleration is measured in m/s^2) */
   Serial.print("X: "); Serial.print(accel_event.acceleration.x); Serial.print("  ");
   Serial.print("Y: "); Serial.print(accel_event.acceleration.y); Serial.print("  ");
@@ -60,7 +55,9 @@ void loop(void)
   Serial.print("Z: "); Serial.print(mag_event.magnetic.z); Serial.print("  ");Serial.println("uT");
   
   /*Acceleration Unit Vector*/
-
+  gen_unit_vec(mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z, &unit_accel);
+  print_unit_vec(unit_accel);
+  
   Serial.println("");
   /* Delay before the next sample */
   delay(500);
